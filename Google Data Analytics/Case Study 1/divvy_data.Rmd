@@ -1,0 +1,528 @@
+---
+title: "Cyclistic Bike-Sharing"
+author: "Farzan Ahmed"
+date: "2022-11-21"
+output: html_document
+---
+
+## Introduction
+
+Google Data Analytics Case Study 1. This case study focuses on Cyclistic, a bike-sharing company in Chicago.
+
+The project will follow steps provided in the course:
+
+-   The steps are in order as follows: Ask, Prepare, Process, Share, and Act
+
+-   At each step there will be a roadmap which will include:
+
+1.  Guiding questions and their answers
+
+2.  Key tasks
+
+3.  Deliverable's
+
+4.  Code, if required
+
+## Ask
+
+### Context:
+
+You are a junior data analyst working in the marketing analyst team at Cyclistic, a bike-share company in Chicago. The director of marketing believes the company's future success depends on maximizing the number of annual memberships. Therefore, your team wants to understand how casual riders and annual members use Cyclistic bikes differently. From these insights, your team will design a new marketing strategy to convert casual riders into annual members. But first, Cyclistic executives must approve your recommendations, so they must be backed up with compelling data insights and professional data visualizations.
+
+### Characters And Teams:
+
+-   **Cyclistic:** A bike-share program that features more than 5,800 bicycles and 600 docking stations. Cyclistic sets itself apart by also offering reclining bikes, hand tricycles, and cargo bikes, making bike-share more inclusive to people with disabilities and riders who can't use a standard two-wheeled bike. The majority of riders opt for traditional bikes; about 8% of riders use the assistive options. Cyclistic users are more likely to ride for leisure, but about 30% use them to commute to work each day.
+
+-   **Lily Moreno:** The director of marketing and your manager. Moreno is responsible for the development of campaigns and initiatives to promote the bike-share program. These may include email, social media, and other channels.
+
+-   **Cyclistic Marketing Analytics Team:** A team of data analysts who are responsible for collecting, analyzing, and reporting data that helps guide Cyclistic marketing strategy. You joined this team six months ago and have been busy learning about Cyclistic's mission and business goals --- as well as how you, as a junior data analyst, can help Cyclistic achieve them.
+
+-   **Cyclistic Executive Team:** The notoriously detail-oriented executive team will decide whether to approve the recommended marketing program.
+
+### Guiding Questions:
+
+-   **What is the problem you are trying to solve?**
+
+The goal of the business is to determine the profiles of the annual members and casual users and create an effective marketing strategy to convert casual riders into annual members.
+
+-   **How can your insights drive business decisions?**
+
+The insights will help the marketing team to identify number of potential casual riders and target them to turn them into annual members.
+
+### Key Tasks:
+
+1.  **Identify the business tasks** - completed
+
+2.  **Consider key stakeholders** - completed
+
+### Deliverable:
+
+-   **A clear statement of the business task**
+
+Find the relationship of usage between the annual members and casual riders and which marketing strategy can help in bringing in more annual members.
+
+## Prepare
+
+### Guiding Questions:
+
+-   **Where is your data is located?**
+
+The data is available publicly through the company database website [here](https://divvy-tripdata.s3.amazonaws.com/index.html "Cyclistic Data").
+
+-   **How is the data organized?**
+
+The data contains 11 .csv files. For the months, starting from December 2021 till November 2022.
+
+-   **Are there issues with bias an credibility in this data? Does it ROCCC?**
+
+The data is collected by the company using there own channels and resources, so there is likely no chance of data being bias and being the company's own data the credibility is very high. The data also does ROCCC it is reliable, original, comprehensive, current, and cited.
+
+-   **How are you addressing licensing, accessibility, privacy, and security?**
+
+The data is open-source and provided by company, the data has been made available by Motivate International Inc. under this [license](https://www.divvybikes.com/data-license-agreement).
+
+-   **How did you verify the data's integrity?**
+
+The data was examined and is consistent in all attributes and data types are consistent throughout.
+
+-   **How does it help you answer your question?**
+
+The data will help us to identify the bike usage, riders, and needs regarding annual members and casual riders.
+
+-   **Are there any problems with the data?**
+
+Information about riders and stations, their units of measures would add to the data's value.
+
+### Key Tasks:
+
+-   **Download data and store it appropriately** - completed
+
+-   **Identify how it's organized** - completed
+
+-   **Sort and filter the data** - completed
+
+-   **Determine the credibility of the data** - completed
+
+### Deliverable:
+
+-   **A description of all data sources used**
+
+The data contains 11 .csv files. For each of the months, starting from December 2021 till November 2022.
+
+## Process
+
+All the files are now combined into 1 single file to make it easy to manipulate and analyze the data. The combined files will be cleaned and additional columns will be added.
+
+### Guiding Questions:
+
+-   **What tools are you choosing and why?**
+
+R is used in processing data-sets because it performs functions more effectively and provide in-dept analysis and manipulation.
+
+-   **Have you insured your data's integrity?**
+
+Yes, the data is consistent throughout all attributes and have correct datatypes.
+
+-   **What steps have you taken to ensure that your data is clean?**
+
+Columns having empty and duplicate rows are removed, date and time are formatted correctly.
+
+-   **How can you verify that your data is cleaned and ready to analyze?**
+
+The steps are presented below to to show that the data is cleaned and ready to analyze.
+
+-   **Have you documented your cleaning process so you can review and share those results?**
+
+The cleaning process is documented completely throughout.
+
+### Key Tasks:
+
+-   **Check the data for errors** - completed
+
+-   **Choose your tools** - completed
+
+-   **Transform the data so you can work with it effectively** - completed
+
+-   **Document the cleaning process** - completed
+
+### Deliverable:
+
+Documentation of any cleaning or manipulation of data.
+
+### Code:
+
+#### Packages
+
+```{r echo=TRUE}
+#Installing Packages
+#install.packages("tidyverse")
+#install.packages("lubridate")
+#install.packages("janitor")
+#install.packages("ggplot2")
+
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(ggplot2)
+```
+
+#### Importing individual files and combining into one
+
+```{r echo=TRUE}
+#Importing files individually
+trip_data_202112 <- read_csv("202112-divvy-tripdata.csv")
+trip_data_202201 <- read_csv("202201-divvy-tripdata.csv")
+trip_data_202202 <- read_csv("202202-divvy-tripdata.csv")
+trip_data_202203 <- read_csv("202203-divvy-tripdata.csv")
+trip_data_202204 <- read_csv("202204-divvy-tripdata.csv")
+trip_data_202205 <- read.csv("202205-divvy-tripdata.csv")
+trip_data_202206 <- read.csv("202206-divvy-tripdata.csv")
+trip_data_202207 <- read.csv("202207-divvy-tripdata.csv")
+trip_data_202208 <- read.csv("202208-divvy-tripdata.csv")
+trip_data_202209 <- read.csv("202209-divvy-publictripdata.csv")
+trip_data_202210 <- read.csv("202210-divvy-tripdata.csv")
+
+#examining all files
+str(trip_data_202112)
+str(trip_data_202201)
+str(trip_data_202202)
+str(trip_data_202203)
+str(trip_data_202204)
+str(trip_data_202205)
+str(trip_data_202206)
+str(trip_data_202207)
+str(trip_data_202208)
+str(trip_data_202209)
+str(trip_data_202210)
+
+#combining all individual files into one file
+divvy_data <- rbind(trip_data_202112, trip_data_202201, trip_data_202202, trip_data_202203, trip_data_202204, trip_data_202205, trip_data_202206, trip_data_202207, trip_data_202208, trip_data_202209, trip_data_202210)
+```
+
+#### Examining the combined data-set
+
+```{r echo=TRUE}
+#examining combined dataset
+str(divvy_data)
+colnames(divvy_data)
+head(divvy_data)
+```
+
+#### Data cleaning
+
+The default format of time is yyyy-mm-dd, hh:mm:ss and to do a deeper analysis it is required to format it into individual column by adding a **day of week** column.
+
+```{r echo=TRUE}
+#Formatting datetime and adding a cloumn
+divvy_data$date <- as.Date(divvy_data$started_at)
+divvy_data$month <- format(as.Date(divvy_data$date), "%b")
+divvy_data$day <- format(as.Date(divvy_data$date), "%d")
+divvy_data$year <- format(as.Date(divvy_data$date), "%Y")
+divvy_data$day_of_week <- format(as.Date(divvy_data$date), "%A")
+
+head(divvy_data)
+```
+
+For further cleaning, now we remove empty and duplicate cells.
+
+```{r echo=TRUE}
+#Removing NA's
+divvy_data <- drop_na(divvy_data)
+
+#Remove duplicates from dataframes
+divvy_data <- divvy_data[!duplicated(divvy_data$ride_id), ]
+print(paste("Removed", nrow(divvy_data) - nrow(divvy_data), "duplicate rows"))
+```
+
+## Analyze
+
+Now the data has been transformed and stored appropriately, it's time to put it to work.
+
+### Guiding Questions:
+
+-   **How should you organize your data to perform analysis on it?**
+
+The data should be organized in a way is effective in getting answers we need to find, relationship between the usage of rides between annual members and casual riders.
+
+-   **Have your data been properly formatted?**
+
+All the data has been formatted accordingly.
+
+-   **What surprises did you discover in your data?**
+
+Data shows that casual riders uses rides more than annual members, so there is a huge potential available.
+
+-   **What trends or relationships did you find in the data?**
+
+The findings that are drawn from the analysis are presented below the following code chunks.
+
+-   **How will these insights help answer your business questions?**
+
+The insights will help in gaining more user base by targeting potential casual riders using targeted marketing.
+
+### Key Tasks:
+
+-   Aggregate your data so it's useful and accessible - completed
+
+-   Organize and format your data - completed
+
+-   Perform calculations - completed
+
+-   Identify trends and relationships - completed
+
+#### Data manipulation
+
+```{r echo=TRUE}
+#Create column to determine ride length
+divvy_data_v2 <- mutate(divvy_data, ride_length = difftime(ended_at, started_at, units = "mins"))
+
+str(divvy_data_v2)
+```
+
+```{r echo=TRUE}
+#Filtering out with rides less than 0
+nrow(divvy_data_v2[divvy_data_v2$ride_length < 0,])
+divvy_data_v3 <- divvy_data_v2[!divvy_data_v2$ride_length < 0,]
+glimpse(divvy_data_v3)
+```
+
+```{r echo=TRUE}
+#determining amount of members vs casual riders
+rider_type_total <- table(divvy_data_v3$member_casual)
+View(rider_type_total)
+```
+
+```{r echo=TRUE}
+#statistical analysis
+trip_stats <- divvy_data_v3 %>% 
+  group_by(member_casual) %>% 
+  summarize(average_ride_length = mean(ride_length), standard_deviation = sd(ride_length), median_ride_length = median(ride_length), min_ride_length = min(ride_length), max_ride_length = max(ride_length))
+head(trip_stats)
+```
+
+```{r echo=TRUE}
+#determine for the day of the week (code learnt from tutorialspoint.com)
+getmode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+weekday_mode <- getmode(divvy_data_v3$day_of_week)
+print(weekday_mode)
+```
+
+```{r echo=TRUE}
+#determine the most popular day by rider type
+divvy_data_v3$day_of_week <- ordered(divvy_data_v3$day_of_week, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+
+divvy_data_v3 %>% 
+  group_by(member_casual, day_of_week) %>% 
+  summarize(rider_type_total = n(), average_ride_length = mean(ride_length)) %>% 
+  arrange(member_casual, day_of_week)
+```
+
+```{r echo=TRUE}
+#determine the most popular month
+popular_month <- divvy_data_v3 %>% 
+  group_by(month) %>% 
+  summarize(number_of_rides = n(), average_duration = mean(ride_length)) %>% 
+  arrange(-number_of_rides)
+view(popular_month)
+```
+
+```{r echo=TRUE}
+#determine the most popular start station
+station_mode <- getmode(divvy_data_v3$start_station_name)
+print(station_mode)
+```
+
+```{r echo=TRUE}
+#determine most popular station for member
+popular_start_stations_member <- divvy_data_v3 %>% 
+  filter(member_casual == "member") %>% 
+  group_by(start_station_name) %>% 
+  summarize(number_of_starts = n()) %>% 
+  filter(start_station_name != "" ) %>% 
+  arrange(-number_of_starts)
+head(popular_start_stations_member)
+```
+
+```{r echo=TRUE}
+#determine most popular station for casual riders
+popular_start_stations_casual_riders <- divvy_data_v3 %>% 
+  filter(member_casual == 'casual') %>% 
+  group_by(start_station_name) %>% 
+  summarize(number_of_starts = n()) %>% 
+  filter(start_station_name != "") %>% 
+  arrange(-number_of_starts)
+head(popular_start_stations_casual_riders)
+```
+
+From the analysis we can determine that:
+
+-   There were more members (2955166) than casual riders (2147747) in the year 2022.
+
+-   Casual riders (22.70 mins) had a higher average ride length than members (12.57 mins).
+
+-   Casual riders had the longest ride time being 34354.067 mins or 572.56 hours.
+
+-   The most popular day for bike sharing was Saturday.
+
+-   The most popular day for casual riders was Saturday with an average ride length of 25.14 mins.
+
+-   The most popular day for members was Thursday with an average ride length of 12.12 mins.
+
+-   The most popular month was July with 822265 rides with an average ride duration of 18.28 mins.
+
+-   The least popular month was January with 80128 rides with an average ride duration of 12.95 mins.
+
+-   The most popular start station for members was "Kingsbury St & Kinzie St" with 23284 trips starting from here.
+
+-   The most popular start station for casual riders was "Streeter Dr & Grand Ave" with 56410 trips starting from here.
+
+## Share
+
+### Guiding Questions:
+
+-   **Were you able to answer the question of how annual members and casual riders use Cyclistic bikes differently?**
+
+Yes, there are number of differences between the annual member and casual riders.
+
+-   **What story does your data tell?**
+
+It is found that there are a large number of potential casual riders who can be targeted to become annual member with the help of marketing campaign.
+
+-   **How do your findings related to your original question?**
+
+The findings explained all the original questions we are trying to get answers.
+
+-   **Who is your audience? What is the best way to communicate with them?**
+
+The audience here is the **Cyclistic Marketing Team** and **Lily Moreno**, the best way to present the findings is to prepare a complete presentation with the visuals and explain them.
+
+-   **Can data visualization help you share your findings?**
+
+Data visualization provides detail comparison between the usage of casual rider and annual members by using graphic visuals that helps in understanding analysis easily.
+
+-   **Is your presentation accessible to your audience?**
+
+The presentation is available upon request but is not freely available. This notebook with the analysis is however accessible.
+
+### Key Tasks:
+
+-   Determine the best way to share your findings - completed
+
+-   Create effective data visualizations - completed
+
+-   Present your findings - completed
+
+-   Ensure your work is accessible - completed
+
+### Deliverable:
+
+Supporting visualizations and key findings.
+
+#### Data Visualization
+
+```{r echo=TRUE}
+#visualization of rider types
+divvy_data_v3 %>% 
+  group_by(member_casual) %>% 
+  summarize(total_rider_type = n()) %>% 
+  ggplot(aes(x=member_casual, y=total_rider_type, fill=member_casual)) +
+  geom_col(position = "dodge") + geom_text(aes(label = total_rider_type, vjust=-0.25))
+```
+
+```{r echo=TRUE}
+#visualization of rider types ride duration
+rider_type_average_duration <- divvy_data_v3 %>% 
+  group_by(member_casual) %>% 
+  summarize(average_ride_length = mean(ride_length))
+rider_type_average_duration %>% 
+  ggplot(aes(x=member_casual, y=average_ride_length, fill=member_casual)) +
+  geom_col(position = "dodge") + geom_text(aes(label = average_ride_length, vjust=0.1))
+```
+
+```{r echo=TRUE}
+#visualization of usage by riders type by the week
+divvy_data_v3 %>% 
+  group_by(member_casual, day_of_week) %>% 
+  summarize(number_of_rides = n(), average_duration = mean(ride_length)) %>% 
+  arrange(member_casual, day_of_week) %>% 
+  ggplot(aes(x=day_of_week, y=average_duration, fill = member_casual)) + 
+  geom_col(position = "dodge")
+```
+
+```{r echo=TRUE}
+#visualization of number of riders by rider type by the week
+divvy_data_v3 %>% 
+  group_by(member_casual, day_of_week) %>% 
+  summarize(number_of_rides = n(), average_duration = mean(ride_length)) %>% 
+  arrange(member_casual, day_of_week) %>% 
+  ggplot(aes(x=day_of_week, y=number_of_rides, fill = member_casual)) + 
+  geom_col(position = "dodge")
+```
+
+```{r echo=TRUE}
+#visualization of the usage by members and casual riders by the month
+divvy_data_v3$month <- ordered(divvy_data_v3$month,
+                               levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+divvy_data_v3 %>% 
+  group_by(member_casual, month) %>% 
+  summarize(number_of_rides = n(), average_duration = mean(ride_length)) %>% 
+  arrange(member_casual, month) %>% 
+  ggplot(aes(x=month, y=average_duration, fill=member_casual)) + 
+  geom_col(position = "dodge") + geom_text(aes(label = number_of_rides, angle = 90)) + 
+  facet_wrap(~member_casual)
+```
+
+```{r echo=TRUE}
+#visualization of the number of trips by members and casual riders by the month
+divvy_data_v3 %>% 
+  group_by(member_casual, month) %>% 
+  summarize(number_of_rides = n()) %>% 
+  arrange(member_casual, month) %>% 
+  ggplot(aes(x=month, y=number_of_rides, fill = member_casual)) + 
+  geom_col(position = "dodge") + geom_text(aes(label = number_of_rides, angle =90)) + facet_wrap(~member_casual)
+```
+
+## Act
+
+### Guiding Questions:
+
+-   What is your final conclusion based on your analysis?
+
+There are many potential casual riders who are using the Cyclistic Bike-Sharing more than annual paid members. With the help of this analysis the marketing team can design a marketing campaign to target the potential casual riders to buy annual membership.
+
+-   How could your team and business apply your insights?
+
+A marketing campaign can be designed to show the long use casual riders, what are the incentives that they can get by subscribing to annual membership.
+
+-   What next steps would you or your stakeholders take based on your findings?
+
+I would recommend a more in-depth analysis on the long use casual riders, however there is enough data to support a digital marketing campaign.
+
+-   Is there additional data you could use to expand your findings?
+
+Additional data that would expand the findings would include: demographic data, climate data, financial data, and marketing campaign history with there ROI.
+
+### Key Tasks:
+
+-   **Create your portfolio** - completed
+
+-   **Add your case study** - completed
+
+-   **Practice presenting your case study to a friend or family member** - completed
+
+### Deliverables:
+
+Recommendations based on your analysis:
+
+1.  Educate casual riders about the perks of being a annual member, as lack of knowledge can be a factor of not getting annual membership.
+
+2.  An ad campaign targeted at the most popular start station use by casual riders can increase engagement or interest in memberships.
+
+3.  A campaign to increase the usage by members especially in the less popular months could increase the number of trips. This campaign should provide benefits or rewards for continued usage with a focus on the less popular months.
+
+## Conclusion
+
+Cyclistic has the potential to grow its membership through digital marketing if it targets the correct users. There is a demand for bike sharing which clearly shows that Cyclistic is offering a needed service and with proper management and marketing can improve membership.
